@@ -67,6 +67,25 @@ void clock_id_list::getStatus()
     std::cout << ")" << std::endl;
 };
 
+void dual_clock_id_list::reset()
+{
+    m_data[0].reset();
+    m_data[1].reset();
+};
+
+void dual_clock_id_list::add(int spreadType, int clockType, int polyType, int id)
+{
+    m_data[spreadType].add(clockType, polyType, id);
+};
+
+void dual_clock_id_list::getStatus()
+{
+    std::cout << "dual_clock_id_list_status: (" << std::endl;
+    m_data[0].getStatus();
+    m_data[1].getStatus();
+    std::cout << ")" << std::endl;
+};
+
 void dual_id_list::reset()
 {
     m_data[0].reset();

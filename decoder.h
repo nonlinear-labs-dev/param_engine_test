@@ -15,7 +15,7 @@ struct decoder
     int m_value;
     int m_sign;
     int m_utilityId = 0;
-    int m_listId = 0;           // later: establish (predefined) lists in order to simplyfy TCD recall or key sequences
+    int m_listId = 0;           // (predefined) lists in order to simplyfy TCD recall or key sequences (recall, key events)
     int m_listIndex = 0;        // list traversal index
     // data structures
     const int m_getSign[2] = {1, -1};
@@ -26,15 +26,15 @@ struct decoder
     // proper init (lists)
     void init();
     // tcd command evaluation
-    int getCommandId(int status);
+    int getCommandId(const int status);
     // tcd argument parsing
-    int unsigned14(int data0, int data1);
-    int signed14(int data0, int data1);
-    void unsigned28upper(int data0, int data1);
-    void signed28upper(int data0, int data1);
-    int apply28lower(int data0, int data1);
+    int unsigned14(const int data0, const int data1);
+    int signed14(const int data0, const int data1);
+    void unsigned28upper(const int data0, const int data1);
+    void signed28upper(const int data0, const int data1);
+    int apply28lower(const int data0, const int data1);
     // tcd voice and parameter selection event evaluation
-    int selectionEvent(int from, int to, int id);
+    int selectionEvent(const int from, const int to, const int id);
     // tcd list traversal
     int traverseRecall();
     int traverseKeyEvent();

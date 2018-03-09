@@ -62,9 +62,8 @@ struct param_engine
     // envelope parameter indeces
     const int m_envIds[sig_number_of_env_events] = {par_envelopeA, par_envelopeB, par_envelopeC};
     // local data structures
-    //poly_id_list m_poly_ids;                                // sorted param ids for selection (seeming obsolete)
     clock_id_list m_clock_ids;                              // sorted param ids for rendering
-    clock_id_list m_post_ids;                               // sorted param ids for automatic post processing (copy/distribute)
+    dual_clock_id_list m_post_ids;                          // sorted param ids for automatic post processing (including spread capability)
     param_head m_head[sig_number_of_params];                // parameter definition items
     param_body m_body[sig_number_of_param_items];           // parameter rendering items
     exponentiator m_convert;                                // exponential scaling
@@ -74,29 +73,29 @@ struct param_engine
     // proper init
     void init();
     // helper functions
-    float scale(int scaleId, float scaleArg, float value);  // provided tcd scale functions
+    float scale(const int scaleId, const float scaleArg, float value);  // provided tcd scale functions
     // tcd mechanism
-    void setDx(int voiceId, int paramId, float value);      // param dx update
-    void setDest(int voiceId, int paramId, float value);    // param dest update
-    void applyPreloaded(int voiceId, int paramId);          // param apply preloaded
-    void applyDest(int index);                              // param apply dest (non-sync types)
-    void applySync(int index);                              // param apply dest (sync types)
+    void setDx(const int voiceId, const int paramId, float value);      // param dx update
+    void setDest(const int voiceId, const int paramId, float value);    // param dest update
+    void applyPreloaded(const int voiceId, const int paramId);          // param apply preloaded
+    void applyDest(const int index);                                    // param apply dest (non-sync types)
+    void applySync(const int index);                                    // param apply dest (sync types)
     // rendering
-    void tickItem(int index);                               // parameter rendering
+    void tickItem(const int index);                                     // parameter rendering
     // simplified post processing approach (one function per clock)
-    void postProcess_slow(float *signal, int voiceId);      // slow post processing (distribution, copy, env c event signal!)
-    void postProcess_fast(float *signal, int voiceId);      // fast post processing (distribution, copy)
-    void postProcess_audio(float *signal, int voiceId);     // audio post processing (distribution, copy, envelopes, param combination)
+    void postProcess_slow(float *signal, const int voiceId);            // slow post processing (distribution, copy, env c event signal!)
+    void postProcess_fast(float *signal, const int voiceId);            // fast post processing (distribution, copy)
+    void postProcess_audio(float *signal, const int voiceId);           // audio post processing (distribution, copy, envelopes, param combination)
     // key events
-    void keyDown(int voiceId, float velocity);              // key events: key down (note on) mechanism
-    void keyUp(int voiceId, float velocity);                // key events: key up (note off) mechanism
-    void keyApply(int voiceId);                             // key events: apply key event
-    void keyApplyMono();                                    // key events: apply mono event
+    void keyDown(const int voiceId, float velocity);                    // key events: key down (note on) mechanism
+    void keyUp(const int voiceId, float velocity);                      // key events: key up (note off) mechanism
+    void keyApply(const int voiceId);                                   // key events: apply key event
+    void keyApplyMono();                                                // key events: apply mono event
     // envelope updates
-    void envUpdateStart(int voiceId, int envId, float pitch, float velocity);
-    void envUpdateStop(int voiceId, int envId, float pitch, float velocity);
-    void envUpdateTimes(int voiceId, int envId);
-    void envUpdateLevels(int voiceId, int envId);
+    void envUpdateStart(const int voiceId, const int envId, const float pitch, const float velocity);
+    void envUpdateStop(const int voiceId, const int envId, const float pitch, const float velocity);
+    void envUpdateTimes(const int voiceId, const int envId);
+    void envUpdateLevels(const int voiceId, const int envId);
     // debug
     void getStatus();
 };

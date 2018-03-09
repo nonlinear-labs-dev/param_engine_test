@@ -1,22 +1,32 @@
 #include <math.h>
 #include <param_engine.h>
 
-void param_engine::postProcess_slow(float *signal, int voiceId)
+void param_engine::postProcess_slow(float *signal, const int voiceId)
 {
     // automatic post processing distribution pointers
     int i;
     int p;
-    // automatic mono distribution:
-    for(i = 0; i < m_post_ids.m_data[3].m_data[0].m_length; i++)
+    // automatic mono distribution (mono copy or poly spread)
+    for(i = 0; i < m_post_ids.m_data[1].m_data[3].m_data[0].m_length; i++)
     {
-        p = m_head[m_post_ids.m_data[3].m_data[0].m_data[i]].m_postId;
-        signal[p] = m_body[m_head[m_post_ids.m_data[3].m_data[0].m_data[i]].m_index].m_signal;
+        // spread mono params to all voices in signal array (poly-related params)
+        p = m_head[m_post_ids.m_data[1].m_data[3].m_data[0].m_data[i]].m_postId;
+        signal[p] = m_body[m_head[m_post_ids.m_data[1].m_data[3].m_data[0].m_data[i]].m_index].m_signal;
+    };
+    if(voiceId == 0)
+    {
+        for(i = 0; i < m_post_ids.m_data[0].m_data[3].m_data[0].m_length; i++)
+        {
+            // only copy mono voice to signal array (fx params)
+            p = m_head[m_post_ids.m_data[0].m_data[3].m_data[0].m_data[i]].m_postId;
+            signal[p] = m_body[m_head[m_post_ids.m_data[0].m_data[3].m_data[0].m_data[i]].m_index].m_signal;
+        };
     };
     // automatic poly copy:
-    for(i = 0; i < m_post_ids.m_data[3].m_data[1].m_length; i++)
+    for(i = 0; i < m_post_ids.m_data[0].m_data[3].m_data[1].m_length; i++)
     {
-        p = m_head[m_post_ids.m_data[3].m_data[1].m_data[i]].m_postId;
-        signal[p] = m_body[m_head[m_post_ids.m_data[3].m_data[1].m_data[i]].m_index + voiceId].m_signal;
+        p = m_head[m_post_ids.m_data[0].m_data[3].m_data[1].m_data[i]].m_postId;
+        signal[p] = m_body[m_head[m_post_ids.m_data[0].m_data[3].m_data[1].m_data[i]].m_index + voiceId].m_signal;
     };
     // update envelope times (A, B, C)
     envUpdateTimes(voiceId, 0);     // Envelope A
@@ -25,29 +35,41 @@ void param_engine::postProcess_slow(float *signal, int voiceId)
     // LATER: Envelope C (Event) Signal at slow clock (?)
     // determine oscA_freq (base pitch, master tune, key tracking, osc pitch, envC missing) and update signal:
     float basePitch = m_body[m_head[par_notePitch].m_index + voiceId].m_signal + m_body[m_head[20].m_index].m_signal;
-    float keyTracking = m_body[m_head[14].m_index].m_signal;
-    float oscPitch = m_body[m_head[13].m_index].m_signal;
+    float keyTracking, oscPitch;
+    //
+    keyTracking = m_body[m_head[14].m_index].m_signal;
+    oscPitch = m_body[m_head[13].m_index].m_signal;
     signal[4] = m_pitch_reference * oscPitch * m_convert.eval_lin_pitch(69 + (basePitch * keyTracking));    // OscA Freq (Hz)
     // determine oscA_chirpFreq and update signal:
     signal[8] = m_body[m_head[18].m_index].m_signal * 440.f;    // Osc A Chirp Filter Frequency (Hz)
 };
 
-void param_engine::postProcess_fast(float *signal, int voiceId)
+void param_engine::postProcess_fast(float *signal, const int voiceId)
 {
     // automatic post processing distribution pointers
     int i;
     int p;
-    // automatic mono distribution:
-    for(i = 0; i < m_post_ids.m_data[2].m_data[0].m_length; i++)
+    // automatic mono distribution (mono copy or poly spread)
+    for(i = 0; i < m_post_ids.m_data[1].m_data[2].m_data[0].m_length; i++)
     {
-        p = m_head[m_post_ids.m_data[2].m_data[0].m_data[i]].m_postId;
-        signal[p] = m_body[m_head[m_post_ids.m_data[2].m_data[0].m_data[i]].m_index].m_signal;
+        // spread mono params to all voices in signal array (poly-related params)
+        p = m_head[m_post_ids.m_data[1].m_data[2].m_data[0].m_data[i]].m_postId;
+        signal[p] = m_body[m_head[m_post_ids.m_data[1].m_data[2].m_data[0].m_data[i]].m_index].m_signal;
+    };
+    if(voiceId == 0)
+    {
+        for(i = 0; i < m_post_ids.m_data[0].m_data[2].m_data[0].m_length; i++)
+        {
+            // only copy mono voice to signal array (fx params)
+            p = m_head[m_post_ids.m_data[0].m_data[2].m_data[0].m_data[i]].m_postId;
+            signal[p] = m_body[m_head[m_post_ids.m_data[0].m_data[2].m_data[0].m_data[i]].m_index].m_signal;
+        };
     };
     // automatic poly copy:
-    for(i = 0; i < m_post_ids.m_data[2].m_data[1].m_length; i++)
+    for(i = 0; i < m_post_ids.m_data[0].m_data[2].m_data[1].m_length; i++)
     {
-        p = m_head[m_post_ids.m_data[2].m_data[1].m_data[i]].m_postId;
-        signal[p] = m_body[m_head[m_post_ids.m_data[2].m_data[1].m_data[i]].m_index + voiceId].m_signal;
+        p = m_head[m_post_ids.m_data[0].m_data[2].m_data[1].m_data[i]].m_postId;
+        signal[p] = m_body[m_head[m_post_ids.m_data[0].m_data[2].m_data[1].m_data[i]].m_index + voiceId].m_signal;
     };
     // update envelope levels
     envUpdateLevels(voiceId, 0);    // Envelope A
@@ -56,22 +78,33 @@ void param_engine::postProcess_fast(float *signal, int voiceId)
     // ??? further calculations on parameters and envelope signals
 };
 
-void param_engine::postProcess_audio(float *signal, int voiceId)
+void param_engine::postProcess_audio(float *signal, const int voiceId)
 {
     // automatic post processing distribution pointers
     int i;
     int p;
-    // automatic mono distribution:
-    for(i = 0; i < m_post_ids.m_data[1].m_data[0].m_length; i++)
+    // automatic mono distribution (mono copy or poly spread)
+    for(i = 0; i < m_post_ids.m_data[1].m_data[1].m_data[0].m_length; i++)
     {
-        p = m_head[m_post_ids.m_data[1].m_data[0].m_data[i]].m_postId;
-        signal[p] = m_body[m_head[m_post_ids.m_data[1].m_data[0].m_data[i]].m_index].m_signal;
+        // spread mono params to all voices in signal array (poly-related params)
+        p = m_head[m_post_ids.m_data[1].m_data[1].m_data[0].m_data[i]].m_postId;
+        signal[p] = m_body[m_head[m_post_ids.m_data[1].m_data[1].m_data[0].m_data[i]].m_index].m_signal;
+    };
+    if(voiceId == 0)
+    {
+        for(i = 0; i < m_post_ids.m_data[0].m_data[1].m_data[0].m_length; i++)
+        {
+            // only copy mono voice to signal array (fx params)
+            p = m_head[m_post_ids.m_data[0].m_data[1].m_data[0].m_data[i]].m_postId;
+            signal[p] = m_body[m_head[m_post_ids.m_data[0].m_data[1].m_data[0].m_data[i]].m_index].m_signal;
+        };
+        // mono envelope could render here...
     };
     // automatic poly copy:
-    for(i = 0; i < m_post_ids.m_data[1].m_data[1].m_length; i++)
+    for(i = 0; i < m_post_ids.m_data[0].m_data[1].m_data[1].m_length; i++)
     {
-        p = m_head[m_post_ids.m_data[1].m_data[1].m_data[i]].m_postId;
-        signal[p] = m_body[m_head[m_post_ids.m_data[1].m_data[1].m_data[i]].m_index + voiceId].m_signal;
+        p = m_head[m_post_ids.m_data[0].m_data[1].m_data[1].m_data[i]].m_postId;
+        signal[p] = m_body[m_head[m_post_ids.m_data[0].m_data[1].m_data[1].m_data[i]].m_index + voiceId].m_signal;
     };
     // update envelope-relevant params and pass information to envelopes
     // render envelopes

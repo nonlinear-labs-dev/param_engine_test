@@ -5,16 +5,17 @@
 
 // main project parameters
 #define dsp_sample_rate 48000
-#define dsp_upsample_factor 1           // 1 (48k) or 2 (96k)
+#define dsp_upsample_factor 1           // 1 (48k) or 2 (96k) - later: stick to sampleRate only
 #define dsp_number_of_voices 8
 #define dsp_poly_types 2
 #define dsp_clock_types 4
 #define dsp_clock_fast_division 5
 #define dsp_clock_slow_division 120
 #define dsp_render_min 1e-9
+/*
 #define dsp_flush_wait_fastTicks 30     // flush waits 30 fast ticks (150 samples, 3.125 ms) (variant I)
 #define dsp_flush_table_size 480        // 1ms at 48k
-
+*/
 // midi operation mode (0 - anton, 1 - tcd), ctrl_ch_id is reserved for pseudo tcd control when in "anton" mode
 #define ext_midi_mode 1
 #define ext_midi_control_channel_id 15

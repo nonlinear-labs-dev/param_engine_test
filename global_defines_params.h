@@ -4,6 +4,7 @@
 #include <global_defines_config.h>
 
 // define: param id, clock type, poly type, range, scale id, scale arg, postID (-1: ignore, > -1: array pos) [7]
+// convention: define poly params with spread = 0 !!
 // postId for direct copy/distribute post processing
 // parameter definition:
 const float param_definition[sig_number_of_params][8] = {
@@ -28,7 +29,7 @@ const float param_definition[sig_number_of_params][8] = {
     {        53,     3,      0,      100,    8,      -20,    -1,     0      },         // 13 OSC_A_PITCH
     {        55,     3,      0,      10000,  0,      0,      -1,     0      },         // 14 OSC_A_PITCH_KT
     {        57,     3,      0,      16000,  4,      0.95,   5,      1      },         // 15 OSC_A_FLUCTUATION (direct, spread)
-    {        60,     2,      0,      8000,   4,      0.5,   -1,     0      },         // 16 OSC_A_PM_SELF
+    {        60,     2,      0,      8000,   4,      0.5,    -1,     0      },         // 16 OSC_A_PM_SELF
     {        62,     3,      0,      16000,  0,      0,      -1,     0      },         // 17 OSC_A_PM_SELF_EMV_A
     {        302,    3,      0,      200,    9,      80,     -1,     0      },         // 18 OSC_A_CHIRP
     // END OSCILLATOR A - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

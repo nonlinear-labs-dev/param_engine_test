@@ -53,27 +53,27 @@ struct env_engine
     env_head m_head[sig_number_of_envelopes];
     env_body m_body[sig_number_of_env_items];
     // proper init
-    void init(float gateRelease);   // parent param_engine determines/initializes gate release time (1 ms) (as long as it is no param)
-    void init_adbdsr(int envId);
-    void init_gate(int envId, float gateRelease);
-    void init_decay(int envId);
+    void init(const float gateRelease);   // parent param_engine determines/initializes gate release time (1 ms) (as long as it is no param)
+    void init_adbdsr(const int envId);
+    void init_gate(const int envId, const float gateRelease);
+    void init_decay(const int envId);
     // segment updates
     void setSegmentDx(int voiceId, int envId, int segmentId, float value);
     void setSegmentDest(int voiceId, int envId, int segmentId, float value);
     // main tick functions (rendering)
     void tickMono();
-    void tickPoly(int voiceId);
+    void tickPoly(const int voiceId);
     // individual item rendering
-    void tickItem(int voiceId, int envId);
+    void tickItem(const int voiceId, const int envId);
     // segment traversal
-    void nextSegment(int voiceId, int envId);
+    void nextSegment(const int voiceId, const int envId);
     // helper functions
     float squaredCurvature(float value, float curvature);
     // triggers (keyDown, keyUp)
-    void startEnvelope(int voiceId, int envId);
-    void stopEnvelope(int voiceId, int envId);
+    void startEnvelope(const int voiceId, const int envId);
+    void stopEnvelope(const int voiceId, const int envId);
     // debugging
-    void getStatus(int envId);
+    void getStatus(const int envId);
 };
 
 #endif // ENV_ENGINE_H

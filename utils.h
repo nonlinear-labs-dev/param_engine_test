@@ -34,6 +34,16 @@ struct clock_id_list
     void getStatus();
 };
 
+struct dual_clock_id_list
+{
+    //
+    clock_id_list m_data[2];
+    //
+    void reset();
+    void add(int spreadType, int clockType, int polyType, int id);
+    void getStatus();
+};
+
 struct dual_id_list
 {
     //

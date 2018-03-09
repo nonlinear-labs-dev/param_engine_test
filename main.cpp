@@ -56,11 +56,11 @@
  * */
 
 /*      CHANGES since 02c:
- *          - Voice Spread added to Param Definition
+ *          - Voice Spread added to Param Definition, copy/spread mechanism established (mono-fx-related or poly-related)
  *          - Flush removed (realized in audio_engine), only trigger is passed
  *          - Parameter Set expanded to: Env A (+ Gate) (13), Osc A (7 basic), Master (2), Poly (5)
  *      TODO:
- *          - voice spread mechanism (id_lists)                 ->      new id_list format in order to force mono params (fx)
+ *          - voice spread mechanism (id_lists)                 ->      done
  *          - trigger functions: direct or per voice/clock?     ->      one per clock per voice
  *
  *          - pseudo TCD input (MIDI Notes and CC to several TCD params, events)
@@ -92,8 +92,10 @@ int main()
     voice_manager host;
     host.init();
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#if debugStatus
     host.tickMain();
     host.m_params.getStatus();
+#endif
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #if tcdKeyDownSequence
     // tcd global time update
@@ -121,9 +123,9 @@ int main()
     // osc a, master params
     host.evalMidiEvent(5, 62, 64);      // OscA Pitch (60 ST)
     host.evalMidiEvent(5, 78, 16);      // OscA Pitch KT (100 %)
-    host.evalMidiEvent(5, 0, 0);        // OscA Fluct
-    host.evalMidiEvent(5, 0, 0);        // OscA PM Self
-    host.evalMidiEvent(5, 0, 0);        // OscA PM Self Env A
+    host.evalMidiEvent(5, 50, 0);        // OscA Fluct
+    host.evalMidiEvent(5, 100, 0);        // OscA PM Self
+    host.evalMidiEvent(5, 100, 0);        // OscA PM Self Env A
     host.evalMidiEvent(5, 93, 96);      // OscA Chirp (12000 = 140 ST)
     host.evalMidiEvent(5, 62, 64);      // Master Volume (8000 = 0 dB)
     host.evalMidiEvent(5, 9, 48);       // Master Tune (1200 = +12 ST)
