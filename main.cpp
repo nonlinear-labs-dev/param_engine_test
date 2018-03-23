@@ -80,8 +80,9 @@
 
 // debug scenarios:
 
-#define tcdKeyDownSequence 1
-#define debugStatus 1
+#define testSelection 1
+#define tcdKeyDownSequence 0
+#define debugStatus 0
 
 // session body: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -91,6 +92,20 @@ int main()
     std::cout << "\nSession Start (Init voice_manager)\n" << std::endl;
     voice_manager host;
     host.init();
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#if testSelection
+    // what's wrong with the selection?
+    host.evalMidiEvent(0, 0, 2);        // V 2
+    host.evalMidiEvent(16, 0, 3);       // VM 3
+    host.evalMidiEvent(1, 0, 10);       // P 10
+    host.evalMidiEvent(17, 4, 0);       // PM 512
+    // print status
+    std::cout << "PARAMS:" << std::endl;
+    host.m_decoder.m_selectedParams.getStatus();
+    std::cout << "VOICES:" << std::endl;
+    host.m_decoder.m_selectedVoices.getStatus();
+    // voice and parameter selection are working...
+#endif
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #if debugStatus
     host.tickMain();
